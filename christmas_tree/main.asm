@@ -3,15 +3,17 @@
 
 section .data
 ;------------
-msg         db      0
-aster_done  db      0           ; finished printting asterixes?
-endl        db      0xA         ; new-line character
-max_chars   db      0           ; maximum number of chars in the pyramid
-cur_chars   db      2           ; current amount of chars in the line
-cur_comp    db      4           ; (max_chars - cur_chars)/2 (current complement)
-line_no     db      0           ; The current line number
 line_count  db      25          ; The number of lines
-    
+
+section .bss
+;-----------
+msg         resb    1           ; stddout singe char message
+aster_done  resb    1           ; finished printting asterixes?
+max_chars   resb    1           ; maximum number of chars in a line
+cur_chars   resb    1           ; current amount of chars in the line
+cur_comp    resb    1           ; (max_chars - cur_chars)/2 (current complement)
+line_no     resb    1           ; The current line number
+
 
 section .text
 ;------------
@@ -54,22 +56,22 @@ space:
 
     ; Print the initial spaces
     inc     r8b
-    mov byte[msg], ' '
+    mov     byte[msg],   ' '
     call    printMsg
-    cmp     r8b, byte[cur_comp]
+    cmp     r8b,         byte [cur_comp]
     jne     space
 
     ; Reset and check if we need to print asterixes
-    mov     r8b,              0
-    cmp byte[aster_done],     0
+    mov     r8b,               0
+    cmp     byte[aster_done],  0
     jne     line_finish
 
 asterix:
     ; Print the asterixes
     inc     r8b
-    mov byte[msg], '*'
+    mov     byte[msg], '*'
     call    printMsg
-    cmp     r8b, byte[cur_chars]
+    cmp     r8b,        byte[cur_chars]
     jne     asterix
 
     ; Check if there are no spaces
@@ -77,9 +79,9 @@ asterix:
     je  line_finish
 
     ; If we're done with asterixes, go back to spaces
-    mov     r8b,       0
-    mov byte[aster_done], 1
-    jmp space
+    mov     r8b,              0
+    mov     byte[aster_done], 1
+    jmp     space
 
 line_finish:
 
