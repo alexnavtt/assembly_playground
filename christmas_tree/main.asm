@@ -10,7 +10,7 @@ max_chars   db      0           ; maximum number of chars in the pyramid
 cur_chars   db      2           ; current amount of chars in the line
 cur_comp    db      4           ; (max_chars - cur_chars)/2 (current complement)
 line_no     db      0           ; The current line number
-line_count  db      16           ; The number of lines
+line_count  db      25          ; The number of lines
     
 
 section .text
@@ -19,11 +19,11 @@ section .text
 _start:
 
     ; Calculate the total number of characters we need per line (4*line_count + 2)
-    mov     al,     byte[line_count]
-    dec     al
-    mov     cl,     4
+    mov     al,     [line_count]
+    inc     al
+    mov     cl,     2
     mul     cl
-    add     al,     2
+    dec     al
     mov byte[max_chars], al
 
 
@@ -34,6 +34,7 @@ print_line:
     inc     al
     mov     cl,     2
     mul     cl
+    dec     al
     mov [cur_chars], al
 
     ; Calculate how many spaces we need
@@ -60,7 +61,7 @@ space:
 
     ; Reset and check if we need to print asterixes
     mov     r8b,              0
-    cmp     byte[aster_done], 0
+    cmp byte[aster_done],     0
     jne     line_finish
 
 asterix:
