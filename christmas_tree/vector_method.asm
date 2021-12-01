@@ -1,13 +1,13 @@
 ;; Assemble: nasm -felf64 vector_method.asm -o vector.o
-;; Link    : gcc vector.o -o vector
+;; Link    : ld -o vector vector.o
 ;; Execute : ./vector
+;; All together: nasm -felf64 vector_method.asm -o vector.o && ld -o vector vector.o && ./vector
 ;;======================================================
-
 
 section .data
 ;------------
     ; Constant defines
-    line_count      equ    70
+    line_count      equ    15
     line_length     equ    2*line_count + 1
     line_center     equ    line_count - 1
 
@@ -16,7 +16,6 @@ section .data
 
 section .bss
 ;-----------
-    ; msg             resb    line_length     ; Output message
     line_number     resb    1               ; Current line number
 
 section .text
@@ -64,5 +63,5 @@ EachLine:
 
     pop rbx
     mov eax, 1      ; sys_exit
-    int 0x80        ; call kernel again with exit command
+    int 0x80        ; call kernel with exit command
 
